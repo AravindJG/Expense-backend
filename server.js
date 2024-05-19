@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import Expense from "./models/expenseModel.js";
+import expenseRouter from "./routes/expenseRoute.js"
 
 dotenv.config();
 
@@ -14,24 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post('/', async (req, res) => {
-    try {
-        const expense = await Expense.create(req.body);
-        res.status(200).json(expense);
-    } catch (error) {
-        res.status(500).json(error.message);
-    }
-})
-
-app.get('/', async (req, res) => {
-    try {
-        const expenses = await Expense.find({});
-        res.status(200).json(expenses);
-    } catch (error) {
-        res.status(500).json(error.message);
-    }
-})
-
+app.use('/',expenseRouter);
 
 mongoose.set('strictQuery', false);
 mongoose.connect(MONGO_URL)
